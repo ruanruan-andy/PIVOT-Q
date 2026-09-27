@@ -1,0 +1,64 @@
+# Python and local tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+*.tmp
+*.swp
+
+# Credentials and environment exports
+.env
+.env.*
+*.pem
+id_rsa*
+id_ed25519*
+.ms_upload_cache
+/env/runtime/
+
+# Generated results and logs
+outputs/
+output/
+results/
+logs/
+log/
+*.log
+*.log.*
+nohup.out
+wandb/
+events.out.tfevents.*
+
+# Downloaded weights, calibration buffers, and datasets
+/models
+/model
+**/models
+**/checkpoints
+**/QuantVLA/model
+/duquant_packed
+/pi05_quantvla/data
+/models/
+/model/
+**/models/
+checkpoints/
+checkpoint-*/
+final_adapter
+duquant_packed/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.npz
+*.npy
+*.parquet
+*.mp4
+*.zip
+*.tar
+*.tar.gz
+.cache/
+cache/
+/pi05_quantvla/data/
+/data/
+/assets/
+# Vendored upstream source assets are not experiment outputs.

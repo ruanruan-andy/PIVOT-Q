@@ -1,0 +1,15 @@
+[submodule "third_party/Omega-QVLA"]
+	path = third_party/Omega-QVLA
+	url = https://github.com/UCMP13753/Omega-QVLA.git
+[submodule "third_party/QVLA"]
+	path = third_party/QVLA
+	url = https://github.com/AutoLab-SAI-SJTU/QVLA.git
+[submodule "third_party/lerobot"]
+	path = third_party/lerobot
+	url = https://github.com/huggingface/lerobot.git
+[submodule "third_party/LIBERO"]
+	path = third_party/LIBERO
+	url = https://github.com/Lifelong-Robot-Learning/LIBERO.git
+[submodule "third_party/LIBERO-plus"]
+	path = third_party/LIBERO-plus
+	url = https://github.com/sylvestf/LIBERO-plus.git

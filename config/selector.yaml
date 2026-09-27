@@ -1,0 +1,25 @@
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  pivot_q_dir: .
+  manifest: manifests/libero_plus_first20.json
+  results_dir: results/train
+  clean_libero_config_path: config/sparse_anchor_libero
+
+training:
+  seed: 0
+  resume: true
+  save_every_steps: 100
+  keep_last_checkpoints: 2
+  save_timestep_scores: true
+  updates_per_episode: 5
+  learning_rate: 5.0e-5
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  anchor_replay_size: 256
+  anchor_batch_size: 4
+
+experiments:
+  pivot_q: {anchor_lambda: 0.1}
+  pivot_q_current_only: {anchor_lambda: 0.1}
+  pivot_q_no_anchor: {anchor_lambda: 0.0}

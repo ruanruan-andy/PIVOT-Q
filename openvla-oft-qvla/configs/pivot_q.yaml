@@ -1,0 +1,4 @@
+extends: base.yaml
+method: pivot_q
+paths:
+  output: ../outputs/qvla/openvla_oft/pivot_q/train/seed-000/libero_spatial

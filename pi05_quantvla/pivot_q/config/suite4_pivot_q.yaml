@@ -1,0 +1,44 @@
+# Four-GPU sequential-suite PIVOT-Q collection.
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  pivot_q_dir: .
+  quantvla_dir: third_party/QuantVLA
+  libero_dir: third_party/LIBERO
+  libero_plus_dir: third_party/LIBERO-plus
+  manifest: manifests/libero_plus_first20.json
+  checkpoint: pi05_quantvla/models/pi05_libero
+  quant_pack_dir: pi05_quantvla/models/quantvla
+  results_dir: outputs/supplement_of_density_and_tail/runs/pi05_pivot_q
+
+experiment:
+  name: pi05_pivot_q_suite4
+  anchor_lambda: 0.1
+
+training:
+  seed: 0
+  resume: true
+  episodes_per_suite: 140
+  updates_per_episode: 5
+  learning_rate: 5.0e-5
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  anchor_replay_size: 256
+  anchor_batch_size: 4
+  save_every_steps: 25
+  keep_last_checkpoints: 1
+
+distributed:
+  suite_order: [libero_10, libero_spatial, libero_object, libero_goal]
+  master_port: 7140
+  rollout_ports: [7100, 7110, 7120, 7130]
+  clean_anchor_ports: [7101, 7111, 7121, 7131]
+
+selection:
+  temporal_horizon: 4
+  temporal_discount: 0.9
+  alpha_q: 0.5
+  beta_r: 0.5
+  phase_bins: 4
+  top_per_phase: 4
+  min_temporal_gap: 4

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "description": "Deterministic LIBERO-Plus subset: first 25 tasks in every suite/category pair, giving 100 tasks per category and 700 total.",
+  "selection": "first_by_task_index",
+  "per_suite_per_category": 25,
+  "categories": [
+    "Camera Viewpoints",
+    "Robot Initial States",
+    "Language Instructions",
+    "Light Conditions",
+    "Background Textures",
+    "Sensor Noise",
+    "Objects Layout"
+  ]
+}

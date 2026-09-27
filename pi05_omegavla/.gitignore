@@ -1,0 +1,5 @@
+__pycache__/
+models/omega/*
+!models/omega/.gitkeep
+outputs/*
+!outputs/.gitkeep

@@ -1,0 +1,5 @@
+# Install the pinned QVLA/openvla-oft package separately; see README.
+PyYAML>=6.0
+pyzmq>=25
+pytest>=8
+huggingface-hub>=0.25

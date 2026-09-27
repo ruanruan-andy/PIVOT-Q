@@ -1,0 +1,31 @@
+# QuantVLA paper setting for LeRobot/OpenPI π0.5. GPU and ports stay in commands.
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  checkpoint: pi05_quantvla/models/pi05_libero
+  quant_pack_dir: pi05_quantvla/models/quantvla
+
+calibration:
+  dataset: third_party/lerobot/libero
+  buffer: pi05_quantvla/data/calibration/libero_clean_32_seed-000.pt
+  observations: 32
+  seed: 0
+
+quantization:
+  weight_bits: 4
+  activation_bits: 8
+  block_size: 16
+  lambda_smooth: 0.15
+  activation_percentile: 99.9
+  calibration_batches: 32
+  enable_permutation: true
+  row_rotation: restore
+  atm_enabled: true
+  ohb_enabled: true
+  log_scale_clip: 0.4
+  neutrality_band: 0.03
+
+# These checkpoint values are loaded and checked, not overridden.
+inference:
+  num_inference_steps: 10
+  n_action_steps: 10
+  action_dim: 7

@@ -1,0 +1,7 @@
+extends: base.yaml
+mode: pivot_q
+paths:
+  results_dir: outputs/holoq_vla/pi05/pivot_q/train
+experiment:
+  name: pi05_omega_pivot_q
+  anchor_lambda: 0.1

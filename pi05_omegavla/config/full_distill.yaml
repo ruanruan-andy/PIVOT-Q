@@ -1,0 +1,11 @@
+extends: base.yaml
+mode: full_distill
+paths:
+  results_dir: outputs/holoq_vla/pi05/full_distill/train
+experiment:
+  name: pi05_omega_full_distill
+  anchor_lambda: 0.0
+distributed:
+  master_port: 7640
+  rollout_ports: [7600, 7610, 7620, 7630]
+  clean_anchor_ports: [7601, 7611, 7621, 7631]

@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "description": "Fast balanced LIBERO-Plus subset: first 6 tasks in every suite/category pair, giving 24 tasks per category and 168 total.",
+  "selection": "first_by_task_index",
+  "total_per_category": 24,
+  "per_suite_per_category": {
+    "libero_spatial": 6,
+    "libero_goal": 6,
+    "libero_object": 6,
+    "libero_10": 6
+  },
+  "categories": [
+    "Camera Viewpoints",
+    "Robot Initial States",
+    "Language Instructions",
+    "Light Conditions",
+    "Background Textures",
+    "Sensor Noise",
+    "Objects Layout"
+  ]
+}

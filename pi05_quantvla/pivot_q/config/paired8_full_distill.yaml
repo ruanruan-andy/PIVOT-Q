@@ -1,0 +1,36 @@
+# Eight-GPU paired dense-distillation ablation; the existing 4-GPU config is unchanged.
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  pivot_q_dir: .
+  quantvla_dir: third_party/QuantVLA
+  libero_dir: third_party/LIBERO
+  libero_plus_dir: third_party/LIBERO-plus
+  manifest: manifests/libero_plus_first20.json
+  checkpoint: pi05_quantvla/models/pi05_libero
+  quant_pack_dir: pi05_quantvla/models/quantvla
+  results_dir: outputs/quantvla/pi05/full_distill/train
+
+experiment:
+  name: pi05_full_distill_paired8
+  anchor_lambda: 0.1
+
+training:
+  seed: 0
+  resume: true
+  episodes_per_suite: 140
+  updates_per_episode: 5
+  learning_rate: 5.0e-5
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  anchor_replay_size: 256
+  anchor_batch_size: 4
+  state_microbatch: 2
+  save_every_steps: 25
+  keep_last_checkpoints: 1
+
+distributed:
+  suite_order: [libero_10, libero_spatial, libero_object, libero_goal]
+  master_port: 6540
+  rollout_ports: [6500, 6510, 6520, 6530]
+  clean_anchor_ports: [6501, 6511, 6521, 6531]

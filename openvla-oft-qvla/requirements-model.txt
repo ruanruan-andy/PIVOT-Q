@@ -1,0 +1,31 @@
+# Linux/CUDA, Python 3.10. Source package is imported from ../QVLA without pip -e.
+-r requirements.txt
+numpy<2
+huggingface-hub==0.25.2
+torch==2.2.0
+torchvision==0.17.0
+torchaudio==2.2.0
+transformers @ git+https://github.com/moojink/transformers-openvla-oft.git@bc339d9ad707454c0c115970db43c260067c61ab
+dlimp @ git+https://github.com/moojink/dlimp_openvla.git@040105d256bd28866cc6620621a3d5f7b6b91b46
+accelerate==0.30.1
+draccus==0.8.0
+einops
+json-numpy
+jsonlines
+matplotlib
+peft==0.11.1
+# Python 3.10 / TF 2.15: keep metadata generated protos and W&B compatible.
+protobuf==3.20.3
+tensorflow-metadata==1.15.0
+rich
+sentencepiece==0.1.99
+timm==0.9.10
+tokenizers==0.19.1
+wandb==0.16.6
+tensorflow==2.15.0
+tensorflow_datasets==4.9.3
+tensorflow_graphics==2021.12.3
+diffusers==0.30.3
+imageio
+uvicorn
+fastapi

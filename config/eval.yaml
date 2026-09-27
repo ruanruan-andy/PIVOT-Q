@@ -1,0 +1,21 @@
+LIBERO_PLUS_NUM: 20
+
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  pivot_q_dir: .
+  quantvla_dir: third_party/QuantVLA
+  libero_plus_dir: third_party/LIBERO-plus
+  manifests_dir: manifests
+  outputs_dir: outputs
+
+evaluation:
+  benchmark: libero-plus
+  policy_seed: 2026
+  num_trials_per_task: 1
+  save_video: false
+
+models:
+  libero_spatial: models/gr00t-n1.5-libero-spatial-posttrain
+  libero_object: models/gr00t-n1.5-libero-object-posttrain
+  libero_goal: models/gr00t-n1.5-libero-goal-posttrain
+  libero_10: models/gr00t-n1.5-libero-long-posttrain

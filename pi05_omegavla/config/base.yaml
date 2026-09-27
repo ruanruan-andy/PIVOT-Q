@@ -1,0 +1,60 @@
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  pivot_q_dir: .
+  omega_source: third_party/Omega-QVLA
+  quantvla_dir: third_party/QuantVLA
+  libero_dir: third_party/LIBERO
+  libero_plus_dir: third_party/LIBERO-plus
+  manifest: manifests/libero_plus_first20.json
+  checkpoint: pi05_quantvla/models/pi05_libero
+  quant_pack_dir: pi05_omegavla/models/omega
+  calibration_buffer: pi05_quantvla/data/calibration/libero_clean_32_seed-000.pt
+quantization:
+  weight_bits: 4
+  activation_bits: 4
+  svd_rank: 16
+  quant_type: custom
+  sq_alpha: 0.5
+  sq_clamp_lo: 0.5
+  sq_clamp_hi: 2.0
+  act_percentile: 99.9
+  gptq_block_size: 128
+  gptq_damp_percent: 0.01
+  gptq_reg_lambda: 0.0
+  gptq_err_comp_gamma: 1.0
+inference:
+  num_inference_steps: 10
+  n_action_steps: 10
+  training_action_steps: 1
+  action_dim: 7
+calibration:
+  seed: 0
+  observations: 32
+  token_cap: 128
+  layers_per_pass: 8
+training:
+  seed: 0
+  resume: true
+  episodes_per_suite: 140
+  updates_per_episode: 5
+  learning_rate: 5.0e-5
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  anchor_replay_size: 256
+  anchor_batch_size: 4
+  save_every_steps: 25
+  keep_last_checkpoints: 1
+distributed:
+  suite_order: [libero_10, libero_spatial, libero_object, libero_goal]
+  master_port: 7540
+  rollout_ports: [7500, 7510, 7520, 7530]
+  clean_anchor_ports: [7501, 7511, 7521, 7531]
+selection:
+  temporal_horizon: 4
+  temporal_discount: 0.9
+  alpha_q: 0.5
+  beta_r: 0.5
+  phase_bins: 4
+  top_per_phase: 4
+  min_temporal_gap: 4

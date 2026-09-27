@@ -1,0 +1,49 @@
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  pivot_q_dir: .
+  quantvla_dir: third_party/QuantVLA
+  omega_source: third_party/Omega-QVLA
+  libero_dir: third_party/LIBERO
+  libero_plus_dir: third_party/LIBERO-plus
+  manifest: manifests/libero_plus_first20.json
+  results_dir: outputs/holoq_vla/groot_n1_5/pivot_q/train
+
+experiment:
+  name: omega_pivot_q
+  anchor_lambda: 0.1
+  denoising_steps: 4
+
+models:
+  libero_spatial: models/gr00t-n1.5-libero-spatial-posttrain
+  libero_object: models/gr00t-n1.5-libero-object-posttrain
+  libero_goal: models/gr00t-n1.5-libero-goal-posttrain
+  libero_10: models/gr00t-n1.5-libero-long-posttrain
+
+packs:
+  libero_spatial: omega_qvla/models/gr00t_spatial/quantized.pt
+  libero_object: omega_qvla/models/gr00t_object/quantized.pt
+  libero_goal: omega_qvla/models/gr00t_goal/quantized.pt
+  libero_10: omega_qvla/models/gr00t_long/quantized.pt
+
+training:
+  seed: 0
+  resume: true
+  save_every_steps: 100
+  keep_last_checkpoints: 2
+  save_timestep_scores: true
+  updates_per_episode: 5
+  learning_rate: 5.0e-5
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  anchor_replay_size: 256
+  anchor_batch_size: 4
+
+selection:
+  temporal_horizon: 4
+  temporal_discount: 0.9
+  alpha_q: 0.5
+  beta_r: 0.5
+  phase_bins: 4
+  top_per_phase: 4
+  min_temporal_gap: 4

@@ -1,0 +1,35 @@
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  pivot_q_root: .
+  omega_qvla_source: third_party/Omega-QVLA
+  quantvla_root: third_party/QuantVLA
+  libero_plus_root: third_party/LIBERO-plus
+  libero_plus_config_path: third_party/QuantVLA/configs/libero_plus
+  manifests_root: manifests
+  results_root: outputs/holoq_vla/groot_n1_5
+
+evaluation:
+  libero_plus_num: 20
+  policy_seed: 2026
+  denoising_steps: 4
+  warmup_steps: 32
+  save_video: false
+
+models:
+  libero_spatial: models/gr00t-n1.5-libero-spatial-posttrain
+  libero_object: models/gr00t-n1.5-libero-object-posttrain
+  libero_goal: models/gr00t-n1.5-libero-goal-posttrain
+  libero_10: models/gr00t-n1.5-libero-long-posttrain
+
+packs:
+  libero_spatial: omega_qvla/models/gr00t_spatial/quantized.pt
+  libero_object: omega_qvla/models/gr00t_object/quantized.pt
+  libero_goal: omega_qvla/models/gr00t_goal/quantized.pt
+  libero_10: omega_qvla/models/gr00t_long/quantized.pt
+
+quantization:
+  weight_bits: 4
+  activation_bits: 4
+  missing_layers: fallback
+  include_regex: '.*(backbone\.eagle_model\.language_model\..*\.(q_proj|k_proj|v_proj|o_proj|gate_proj|up_proj|down_proj)|action_head\.model\.transformer_blocks\.\d+\.(attn1\.(to_q|to_k|to_v|to_out\.0)|ff\.net\.(0\.proj|2))).*'
+  exclude_regex: '(?:^|\.)(vision|radio|norm|ln|layernorm|embed|lm_head|timestep_encoder|state_encoder|action_encoder|action_decoder|pos_embed|vl_self_attention|vlln|future_tokens)(?:\.|$)'

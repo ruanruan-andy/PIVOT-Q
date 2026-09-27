@@ -1,0 +1,57 @@
+{
+  "Omega-QVLA": {
+    "upstream": "https://github.com/UCMP13753/Omega-QVLA.git",
+    "base_commit": "3727e2203568db43fc5fba06ee8686c1b47c044f",
+    "files": [],
+    "deleted_paths": [],
+    "excluded_runtime_paths": [
+      ".ms_upload_cache"
+    ]
+  },
+  "QVLA": {
+    "upstream": "https://github.com/AutoLab-SAI-SJTU/QVLA.git",
+    "base_commit": "26cc4821a3be4c003d09d3c7997b38db2a347982",
+    "files": [],
+    "deleted_paths": [],
+    "excluded_runtime_paths": [
+      ".ms_upload_cache"
+    ]
+  },
+  "lerobot": {
+    "upstream": "https://github.com/huggingface/lerobot.git",
+    "base_commit": "713a409faedd73bb5597481b8885f17fbee23330",
+    "files": [],
+    "deleted_paths": [],
+    "excluded_runtime_paths": [
+      ".ms_upload_cache"
+    ]
+  },
+  "LIBERO": {
+    "upstream": "https://github.com/Lifelong-Robot-Learning/LIBERO.git",
+    "base_commit": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+    "files": [
+      {
+        "path": "libero/libero/benchmark/__init__.py",
+        "executable": false
+      }
+    ],
+    "deleted_paths": [],
+    "excluded_runtime_paths": [
+      ".ms_upload_cache"
+    ]
+  },
+  "LIBERO-plus": {
+    "upstream": "https://github.com/sylvestf/LIBERO-plus.git",
+    "base_commit": "4976dc30028e805ff8094b55501d532c48fec182",
+    "files": [
+      {
+        "path": "libero/libero/benchmark/__init__.py",
+        "executable": false
+      }
+    ],
+    "deleted_paths": [],
+    "excluded_runtime_paths": [
+      ".ms_upload_cache"
+    ]
+  }
+}

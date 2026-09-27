@@ -1,0 +1,9 @@
+{
+  "url": "https://github.com/AutoLab-SAI-SJTU/QVLA.git",
+  "commit": "26cc4821a3be4c003d09d3c7997b38db2a347982",
+  "source_subdir": "openvla-oft",
+  "transformers_url": "https://github.com/moojink/transformers-openvla-oft.git",
+  "transformers_commit": "bc339d9ad707454c0c115970db43c260067c61ab",
+  "dlimp_commit": "040105d256bd28866cc6620621a3d5f7b6b91b46",
+  "quantization": "official weight-only per-output-channel fake quantization"
+}

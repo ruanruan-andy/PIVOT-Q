@@ -1,0 +1,3 @@
+# OpenVLA-OFT + QVLA model environment; keep one canonical dependency list.
+# Run from PIVOT_Q: python -m pip install -r env/requirements/oft_qvla.txt
+-r ../../openvla-oft-qvla/requirements-model.txt

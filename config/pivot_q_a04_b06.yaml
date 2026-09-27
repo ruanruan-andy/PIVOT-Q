@@ -1,0 +1,12 @@
+paths:
+  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  pivot_q_dir: .
+  quantvla_dir: third_party/QuantVLA
+  libero_dir: third_party/LIBERO
+  libero_plus_dir: third_party/LIBERO-plus
+  manifest: manifests/libero_plus_first20.json
+  results_dir: outputs/quantvla/groot_n1_5/ablations/score_a04_b06/train
+
+experiment: {name: pivot_q_a04_b06, anchor_lambda: 0.1}
+training: {seed: 0, resume: true, save_every_steps: 100, keep_last_checkpoints: 2, save_timestep_scores: true, updates_per_episode: 5, learning_rate: 5.0e-5, lora_rank: 16, lora_alpha: 32, lora_dropout: 0.05, anchor_replay_size: 256, anchor_batch_size: 4}
+selection: {temporal_horizon: 4, temporal_discount: 0.9, alpha_q: 0.4, beta_r: 0.6, phase_bins: 4, top_per_phase: 4, min_temporal_gap: 4}

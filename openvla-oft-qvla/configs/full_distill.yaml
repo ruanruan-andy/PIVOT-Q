@@ -1,0 +1,4 @@
+extends: base.yaml
+method: full_distill
+paths:
+  output: ../outputs/qvla/openvla_oft/full_distill/train/seed-000/libero_spatial

@@ -1,0 +1,4 @@
+extends: base.yaml
+method: fp
+paths:
+  output: ../outputs/qvla/openvla_oft/original/eval/seed-2026/libero_spatial
