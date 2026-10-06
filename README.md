@@ -13,7 +13,8 @@
   <a href="env/README.md"><img src="https://img.shields.io/badge/Built_with-PyTorch-8B7BB3?style=for-the-badge&amp;logo=pytorch&amp;logoColor=white" alt="PyTorch installation"></a>
 </p>
 
-[**Overview**](#overview) · [**Method**](#method) · [**Results**](#main-results) · [**Setup**](#environment-setup) · [**Train & Eval**](#reproduction) · [**Documentation**](#documentation)
+
+[**Overview**](#overview) · [**Method**](#method) · [**Results**](#main-results) · [**Setup**](#environment-setup) · [**Train & Eval**](#reproduction) · [**Documentation**](#documentation) · [**Citation**](#citation)
 
 </div>
 
@@ -204,3 +205,20 @@ Please cite the corresponding upstream projects when using their resources.
 <p align="center"><strong>PIVOT-Q</strong> · Find what really matters. Recover what truly counts.</p>
 
 The primary-project license must be selected by the authors before public distribution. Upstream licenses remain applicable.
+
+<a id="citation"></a>
+
+## 📖 Citation
+
+If you find PIVOT-Q useful in your research, please cite:
+
+```bibtex
+@misc{ruan2026indistributionpreservationrecoveringgeneralization,
+  title         = {Beyond In-Distribution Preservation: Recovering Generalization in Quantized VLAs via Vulnerability-Oriented Tuning},
+  author        = {Shen Ruan and Wenchang Gao and Jin Wang and Siao Liu and Dongchun Ren and Xin Zheng},
+  year          = {2026},
+  eprint        = {2610.05745},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2610.05745}
+}
