@@ -6,6 +6,8 @@
 
 **Find what really matters. Recover what truly counts.**
 
+**Paper:** [PIVOT-Q (arXiv:2610.05745)](https://arxiv.org/abs/2610.05745)
+
 <p>
   <a href="#method"><img src="https://img.shields.io/badge/Recovery-PIVOT--Q-2F80C0?style=for-the-badge" alt="PIVOT-Q recovery"></a>
   <a href="#evaluation-protocol"><img src="https://img.shields.io/badge/Benchmark-LIBERO--Plus-62C7A5?style=for-the-badge" alt="LIBERO-Plus benchmark"></a>
@@ -13,7 +15,8 @@
   <a href="env/README.md"><img src="https://img.shields.io/badge/Built_with-PyTorch-8B7BB3?style=for-the-badge&amp;logo=pytorch&amp;logoColor=white" alt="PyTorch installation"></a>
 </p>
 
-[**Overview**](#overview) · [**Method**](#method) · [**Results**](#main-results) · [**Setup**](#environment-setup) · [**Train & Eval**](#reproduction) · [**Documentation**](#documentation)
+
+[**Overview**](#overview) · [**Method**](#method) · [**Results**](#main-results) · [**Setup**](#environment-setup) · [**Train & Eval**](#reproduction) · [**Documentation**](#documentation) · [**Citation**](#citation)
 
 </div>
 
@@ -57,18 +60,46 @@ Anchor on the original LIBERO distribution. See the
 
 ## 📊 Main results
 
-**LIBERO-Plus success rate (%) ↑** · Mean ± sample standard deviation across completed evaluation seeds.
+**LIBERO-Plus success rate (%) ↑** · Mean ± sample standard deviation across three seeds.
+FSD denotes Full State Distillation. “#States” is the average number of distilled
+states per episode. “Δ” is the overall average minus Original, in percentage points.
+Bold marks the larger mean between FSD and PIVOT-Q for each category and the overall average.
 
-| Model · Quantization | Original | Quantized | Full Distill | **PIVOT-Q** | Gain ↑ |
-| :-- | --: | --: | --: | --: | --: |
-| **GR00T-N1.5**<br>QuantVLA · W4A8 | 81.4&nbsp;±&nbsp;0.8 | 66.6&nbsp;±&nbsp;0.9 | 76.9&nbsp;±&nbsp;1.7 | **81.3&nbsp;±&nbsp;0.4** | **+14.7** |
-| **π₀.₅**<br>QuantVLA · W4A8 | 78.9&nbsp;±&nbsp;0.6 | 71.9&nbsp;±&nbsp;0.6 | 72.7&nbsp;±&nbsp;0.5 | **72.8&nbsp;±&nbsp;1.3** | **+0.9** |
-| **GR00T-N1.5**<br>HoloQ-VLA · W4A4 | 82.0&nbsp;±&nbsp;0.2 | 68.2&nbsp;±&nbsp;0.5 | **78.9&nbsp;±&nbsp;1.4** | 78.0&nbsp;±&nbsp;1.5 | **+9.8** |
-| **OpenVLA-OFT**<br>QVLA · Mixed-bit W-only | 63.5&nbsp;±&nbsp;0.3 | 52.7&nbsp;±&nbsp;0.8 | 60.4&nbsp;±&nbsp;0.9 | **60.8&nbsp;±&nbsp;0.3** | **+8.1** |
+### HoloQ-VLA (W4A4) — GR00T-N1.5
 
-<sub>Bold marks the higher mean among Full Distill and PIVOT-Q within each setting.
-Original is the reference policy. Gain is PIVOT-Q minus Quantized, in percentage points.
-QVLA uses a target average 4-bit weight budget.</sub>
+| Method | Cam. | Init. | Lang. | Light | Back. | Noise | Layout | Avg. ↑ | #States | Δ ↑ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Original | 86.3 ± 2.5 | 35.0 ± 3.3 | 77.9 ± 1.4 | 97.5 ± 0.0 | 97.9 ± 0.7 | 87.5 ± 0.0 | 91.7 ± 1.9 | 82.0 ± 0.2 | — | — |
+| Quantized | 67.5 ± 1.2 | 27.1 ± 3.1 | 65.0 ± 2.2 | 95.0 ± 1.2 | 81.7 ± 2.6 | 59.2 ± 3.1 | 82.1 ± 2.6 | 68.2 ± 0.5 | — | −13.8 |
+| FSD | 79.2 ± 1.9 | 32.1 ± 2.6 | **75.4 ± 3.8** | **96.2 ± 2.5** | **98.8 ± 1.2** | 74.2 ± 1.9 | 90.0 ± 1.2 | 78.0 ± 0.4 | 199.4 | −4.0 |
+| PIVOT-Q | **85.0 ± 2.2** | **36.2 ± 4.3** | 71.2 ± 5.7 | 92.5 ± 3.3 | 96.7 ± 0.7 | **75.4 ± 4.0** | **91.2 ± 0.0** | **78.3 ± 1.6** | 16.0 | −3.7 |
+
+### QuantVLA (W4A8) — GR00T-N1.5
+
+| Method | Cam. | Init. | Lang. | Light | Back. | Noise | Layout | Avg. ↑ | #States | Δ ↑ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Original | 84.6 ± 0.7 | 34.6 ± 2.6 | 78.3 ± 0.7 | 96.7 ± 1.9 | 97.9 ± 0.7 | 87.9 ± 2.6 | 90.0 ± 2.2 | 81.4 ± 0.8 | — | — |
+| Quantized | 60.4 ± 2.6 | 31.7 ± 3.1 | 61.2 ± 2.2 | 86.7 ± 3.6 | 76.7 ± 1.4 | 66.2 ± 1.2 | 83.3 ± 0.7 | 66.6 ± 0.9 | — | −14.8 |
+| FSD | **83.3 ± 1.4** | 33.3 ± 2.9 | 70.0 ± 2.2 | 99.2 ± 0.7 | 99.2 ± 0.7 | 73.8 ± 1.2 | 79.6 ± 10.1 | 76.9 ± 1.6 | 210.0 | −4.5 |
+| PIVOT-Q | 77.9 ± 2.6 | **37.9 ± 1.9** | **79.6 ± 1.9** | 99.2 ± 0.7 | **99.6 ± 0.7** | **85.4 ± 3.1** | **89.6 ± 0.7** | **81.3 ± 0.4** | 16.0 | −0.1 |
+
+### QuantVLA (W4A8) — π₀.₅
+
+| Method | Cam. | Init. | Lang. | Light | Back. | Noise | Layout | Avg. ↑ | #States | Δ ↑ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Original | 82.1 ± 4.7 | 72.9 ± 1.4 | 70.0 ± 2.5 | 86.7 ± 0.7 | 89.6 ± 3.1 | 70.8 ± 3.6 | 80.4 ± 1.9 | 78.9 ± 0.6 | — | — |
+| Quantized | 57.1 ± 5.1 | 70.0 ± 2.5 | 57.9 ± 1.4 | 86.3 ± 3.3 | 80.4 ± 0.7 | 67.5 ± 0.0 | 84.2 ± 1.4 | 71.9 ± 0.6 | — | −7.0 |
+| FSD | **68.3 ± 5.9** | 66.3 ± 2.5 | **65.8 ± 2.6** | 83.3 ± 2.6 | **82.1 ± 1.9** | 64.2 ± 0.7 | 79.2 ± 0.7 | 72.7 ± 0.5 | 232.7 | −6.2 |
+| PIVOT-Q | 67.5 ± 6.3 | **71.7 ± 3.8** | 57.9 ± 4.0 | 83.3 ± 2.6 | 80.0 ± 1.3 | **66.7 ± 2.6** | **82.5 ± 4.3** | **72.8 ± 1.3** | 16.0 | −6.1 |
+
+### QVLA (Mixed-bit W-only) — OpenVLA-OFT
+
+| Method | Cam. | Init. | Lang. | Light | Back. | Noise | Layout | Avg. ↑ | #States | Δ ↑ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Original | 55.0 ± 0.0 | 21.7 ± 0.7 | 86.3 ± 0.0 | 77.1 ± 0.7 | 68.8 ± 0.0 | 48.3 ± 0.7 | 87.5 ± 1.3 | 63.5 ± 0.3 | — | — |
+| Quantized | 50.0 ± 0.0 | 22.9 ± 0.7 | 76.3 ± 0.0 | 40.4 ± 2.9 | 66.3 ± 2.2 | 42.5 ± 1.3 | 70.4 ± 3.1 | 52.7 ± 0.8 | — | −10.8 |
+| FSD | **59.6 ± 0.7** | 20.0 ± 0.0 | **71.2 ± 0.0** | **72.9 ± 1.9** | **79.6 ± 1.9** | **48.8 ± 1.2** | 70.8 ± 2.6 | 60.4 ± 0.9 | 242.0 | −3.1 |
+| PIVOT-Q | 57.5 ± 0.0 | **23.3 ± 0.7** | 69.6 ± 0.7 | 70.4 ± 2.6 | 77.5 ± 2.2 | 44.2 ± 1.9 | **83.3 ± 1.9** | **60.8 ± 0.3** | 16.0 | −2.7 |
 
 Full Distill supervises all valid rollout states; PIVOT-Q uses a target budget
 of 16 selected states per rollout. Full seed-level and seven-category reporting
@@ -204,3 +235,20 @@ Please cite the corresponding upstream projects when using their resources.
 <p align="center"><strong>PIVOT-Q</strong> · Find what really matters. Recover what truly counts.</p>
 
 The primary-project license must be selected by the authors before public distribution. Upstream licenses remain applicable.
+
+<a id="citation"></a>
+
+## 📖 Citation
+
+If you find PIVOT-Q useful in your research, please cite:
+
+```bibtex
+@misc{ruan2026indistributionpreservationrecoveringgeneralization,
+  title         = {Beyond In-Distribution Preservation: Recovering Generalization in Quantized VLAs via Vulnerability-Oriented Tuning},
+  author        = {Shen Ruan and Wenchang Gao and Jin Wang and Siao Liu and Dongchun Ren and Xin Zheng},
+  year          = {2026},
+  eprint        = {2610.05745},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2610.05745}
+}
