@@ -22,6 +22,8 @@
 
 > **Public source release.** Modified QuantVLA is bundled in `third_party/QuantVLA`; other dependencies use pinned official submodules. Model weights, datasets, and experiment outputs are downloaded separately.
 
+**RTX 4090:** see the [training and evaluation guide](docs/4090.md).
+
 <table align="center">
 <tr>
 <td align="center" width="33%"><h3>🎯 16 states</h3><strong>Selected per rollout</strong><br><sub>Phase-balanced sparse recovery</sub></td>

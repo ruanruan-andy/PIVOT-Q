@@ -46,7 +46,7 @@ def upstream_links(root):
             links.append((target, os.path.relpath(source, target.parent)))
     return links
 
-def plan(root, settings):
+def plan(root, settings, previous_roots=()):
     runtime = root/'env/runtime'
     state = runtime/'relocation.json'
     previous = json.loads(state.read_text()) if state.exists() else {}
@@ -55,6 +55,8 @@ def plan(root, settings):
     if old and old != str(root):
         mapping[old] = str(root)
     mapping['/path/to/PIVOT-Q'] = str(root)
+    for previous_root in previous_roots:
+        mapping[str(Path(previous_root).expanduser())] = str(root)
     files = {root/'config/eval.yaml'}
     for setting in settings:
         for pattern in CONFIGS[setting]:
@@ -120,13 +122,15 @@ def main():
     parser.add_argument('root', type=Path, nargs='?', default=Path(__file__).resolve().parents[1])
     parser.add_argument('--setting', action='append', choices=CONFIGS)
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--previous-root', action='append', default=[],
+                        help='Previous checkout root recorded in transferred pack/checkpoint metadata; repeat as needed.')
     parser.add_argument('--paths-only', action='store_true',
                         help='Configure paths before installing/checking submodules.')
     args = parser.parse_args()
     root = args.root.expanduser().resolve()
     if not (root/'pivot_q/train.py').is_file():
         parser.error(f'Not a PIVOT-Q checkout: {root}')
-    changes = plan(root, args.setting or list(CONFIGS))
+    changes = plan(root, args.setting or list(CONFIGS), args.previous_root)
     links = [] if args.paths_only else upstream_links(root)
     for path in changes:
         print(f'CONFIGURE {path.relative_to(root)}')

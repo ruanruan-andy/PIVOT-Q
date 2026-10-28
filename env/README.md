@@ -230,3 +230,10 @@ Verify that imports resolve to this checkout's `third_party/` repositories;
 reinstall editable packages after relocation if necessary. These requirements
 are reference package versions, not a container-level lockfile. See
 [commands](../docs/commands.md) and [protocol](../docs/experiment_protocol.md).
+
+### Transferred metadata and RTX 4090
+
+For downloaded packs/checkpoints carrying a previous checkout root, add
+`--previous-root /absolute/previous/project/root` to `env/configure_paths.py`
+(repeat for multiple roots). This records path relocation without modifying
+model weights, gates, or identity checks. See [RTX 4090 training and evaluation](../docs/4090.md).

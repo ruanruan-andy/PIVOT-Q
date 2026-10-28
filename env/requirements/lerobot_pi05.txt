@@ -115,3 +115,6 @@ Wand==0.7.2
 xxhash==4.0.1
 yarl==1.24.5
 zipp==4.1.0
+
+# Required by the editable LeRobot installation.
+setuptools==81.0.0

@@ -1,5 +1,5 @@
 paths:
-  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  root_dir: /home/ps/data/nguyen/PIVOT-Q
   pivot_q_dir: .
   quantvla_dir: third_party/QuantVLA
   omega_source: third_party/Omega-QVLA

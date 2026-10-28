@@ -1,6 +1,6 @@
 # Four-GPU sequential-suite PIVOT-Q collection.
 paths:
-  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  root_dir: /home/ps/data/nguyen/PIVOT-Q
   pivot_q_dir: .
   quantvla_dir: third_party/QuantVLA
   libero_dir: third_party/LIBERO

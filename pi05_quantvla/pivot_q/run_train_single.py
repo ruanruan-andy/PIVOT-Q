@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT))
 ORDER = ["libero_object", "libero_spatial", "libero_goal", "libero_10"]
 
 
-def main(backend="quantvla"):
+def main(backend="quantvla", worker="train_single.py"):
     import yaml
     from env.conda_utils import conda_python
     from env.processes import managed_processes, run_worker
@@ -106,7 +106,7 @@ def main(backend="quantvla"):
         services.append(([python, str(quant / "scripts/libero_iid_env_service.py"), "--port", str(args.clean_port)],
                          clean_env, output / "logs/clean_service.log"))
     runtime = output / "single_runtime.json"
-    command = [sys.executable, str(root / "pi05_quantvla/pivot_q/train_single.py"), "--runtime-config", str(runtime)]
+    command = [sys.executable, str(root / "pi05_quantvla/pivot_q" / worker), "--runtime-config", str(runtime)]
     if args.dry_run:
         print(json.dumps({"train": shlex.join(command), "config": values,
                           "services": [shlex.join(s[0]) for s in services], "gpu": args.gpu,

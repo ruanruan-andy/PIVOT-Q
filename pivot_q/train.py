@@ -1055,7 +1055,9 @@ def train(
                 anchor_losses = []
                 gradient_norms = []
                 # Stage 6: backpropagate selected target states and clean anchors.
-                for states, normalized_weights in zip(update_states, update_weights, strict=True):
+                for states, normalized_weights in tqdm(zip(update_states, update_weights, strict=True),
+                        total=len(update_states), desc="Optimizer updates", unit="update",
+                        leave=False, dynamic_ncols=True):
                     optimizer.zero_grad(set_to_none=True)
                     for state, scale in zip(states, normalized_weights, strict=True):
                         main_losses.append(
@@ -1180,6 +1182,7 @@ def train(
                     )
                 )
                 progress.set_postfix(
+                    step=f"{optimizer_step}/{config.num_rollout_episodes * config.updates_per_episode}",
                     category=record["category"],
                     q=f"{record['q_mean']:.3e}",
                     grad=f"{record['gradient_norm_mean']:.3e}",

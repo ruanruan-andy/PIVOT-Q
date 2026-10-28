@@ -1,7 +1,7 @@
 LIBERO_PLUS_NUM: 20
 
 paths:
-  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  root_dir: /home/ps/data/nguyen/PIVOT-Q
   pivot_q_dir: .
   quantvla_dir: third_party/QuantVLA
   libero_plus_dir: third_party/LIBERO-plus

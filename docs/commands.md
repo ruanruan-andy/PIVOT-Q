@@ -1,5 +1,7 @@
 # Training and evaluation commands
 
+For RTX 4090 across all settings, see [the 4090 guide](4090.md).
+
 For pi0.5 on one GPU, see [single-GPU recovery training](commands-pi05-single-gpu.md).
 
 Complete [installation](../env/README.md) first. In each terminal:

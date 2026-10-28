@@ -1,6 +1,6 @@
 # QuantVLA paper setting for LeRobot/OpenPI π0.5. GPU and ports stay in commands.
 paths:
-  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  root_dir: /home/ps/data/nguyen/PIVOT-Q
   checkpoint: pi05_quantvla/models/pi05_libero
   quant_pack_dir: pi05_quantvla/models/quantvla
 

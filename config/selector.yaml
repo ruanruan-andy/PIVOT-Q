@@ -1,5 +1,5 @@
 paths:
-  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  root_dir: /home/ps/data/nguyen/PIVOT-Q
   pivot_q_dir: .
   manifest: manifests/libero_plus_first20.json
   results_dir: results/train

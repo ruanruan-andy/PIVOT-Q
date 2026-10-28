@@ -1,7 +1,7 @@
 # Global random sparse diagnostic: one uniform-weighted random 16-state set
 # from the complete valid trajectory, without phase quotas or temporal gaps.
 paths:
-  root_dir: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q
+  root_dir: /home/ps/data/nguyen/PIVOT-Q
   pivot_q_dir: .
   quantvla_dir: third_party/QuantVLA
   libero_dir: third_party/LIBERO

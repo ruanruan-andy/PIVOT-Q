@@ -8,6 +8,7 @@ import math
 import random
 
 import torch
+from tqdm.auto import tqdm
 
 from evaluation.environment import EnvClient, episode_specs, validate_service
 from integration.config import atomic_json, parse_config, resolve
@@ -44,7 +45,7 @@ def update(student, optimizer, records, weights, anchors, cfg):
     return {"loss": main_loss, "anchor_loss": anchor_loss, "gradient_norm": float(norm)}
 
 
-def train(cfg):
+def train(cfg, *, policy_factory=OFTPolicy, collect_fn=collect):
     if cfg["method"] not in {"pivot_q", "full_distill"}:
         raise ValueError("training requires pivot_q or full_distill")
     if cfg["paths"]["adapter"]:
@@ -64,8 +65,8 @@ def train(cfg):
         client = stack.enter_context(EnvClient(cfg))
         validate_service(client, cfg)
         clean = stack.enter_context(EnvClient(cfg, clean=True)) if t["anchor_lambda"] else None
-        teacher = OFTPolicy(cfg, teacher=True)
-        student = OFTPolicy(cfg, quantized=True, trainable=True)
+        teacher = policy_factory(cfg, teacher=True)
+        student = policy_factory(cfg, quantized=True, trainable=True)
         optimizer = torch.optim.AdamW(student.parameters(), lr=t["learning_rate"], weight_decay=t["weight_decay"])
         total = t["episodes"] * t["updates_per_episode"]
 
@@ -98,13 +99,16 @@ def train(cfg):
                                          "teacher": teacher.identity, "manifest": manifest_data,
                                          "diagnostics": definition(cfg),
                                          "adapter_targets": student.adapter_targets})
-        for episode in range(episode + 1, t["episodes"] + 1):
+        progress = stack.enter_context(tqdm(range(episode + 1, t["episodes"] + 1),
+            initial=episode, total=t["episodes"], desc=cfg["suite"], unit="rollout", dynamic_ncols=True))
+        progress.set_postfix(step=f"{step}/{total}")
+        for episode in progress:
             position = (episode - 1) % len(schedule)
             if position == 0 and episode > 1:
                 sampler.shuffle(schedule)
             spec = specs[schedule[position]]
             save_states = cfg.get("diagnostics", {}).get("save_train_states", True)
-            records, outcome = collect(cfg, student, client, spec, teacher=teacher, capture_actions=save_states)
+            records, outcome = collect_fn(cfg, student, client, spec, teacher=teacher, capture_actions=save_states)
             if not records:
                 raise RuntimeError(f"episode {episode}: no valid training states")
             selection = select([record["q"] for record in records], cfg["method"], cfg["selection"])
@@ -114,21 +118,23 @@ def train(cfg):
             if clean:
                 clean_spec = {"task_id": sampler.choice(t["clean_task_ids"]),
                               "initial_state_id": sampler.choice(t["clean_initial_state_ids"])}
-                anchors, _ = collect(cfg, student, clean, clean_spec, teacher=teacher, horizon=t["anchor_horizon"])
+                anchors, _ = collect_fn(cfg, student, clean, clean_spec, teacher=teacher, horizon=t["anchor_horizon"])
                 replay.extend(anchors)
             losses = []
-            for _ in range(t["updates_per_episode"]):
+            for _ in tqdm(range(t["updates_per_episode"]), desc="Optimizer updates", unit="update",
+                          leave=False, dynamic_ncols=True):
                 anchors = sampler.sample(list(replay), min(t["anchor_batch_size"], len(replay))) if clean else []
                 losses.append(update(student, optimizer, states, selection["weights"], anchors, cfg))
                 scheduler.step()
                 step += 1
+                progress.set_postfix(step=f"{step}/{total}", selected=len(states))
             row = {"episode": episode, "optimizer_step": step, **spec, **outcome, **diagnostic,
                    "selected_states": len(states), "state_evaluations": len(states) * t["updates_per_episode"],
                    "selection": {**selection, "weights": selection["weights"].tolist()},
                    "updates": losses, "anchor_buffer_size": len(replay)}
             with (output / "metrics.jsonl").open("a") as stream:
                 stream.write(json.dumps(row) + "\n")
-            print(json.dumps({k: row[k] for k in ("episode", "success", "states", "selected_states", "optimizer_step")}), flush=True)
+            tqdm.write(json.dumps({k: row[k] for k in ("episode", "success", "states", "selected_states", "optimizer_step")}))
             if episode % t["save_every_episodes"] == 0 or episode == t["episodes"]:
                 path = output / f"checkpoint-{episode:06d}.pt"
                 checkpoint.save(path, student, cfg, episode=episode, step=step,

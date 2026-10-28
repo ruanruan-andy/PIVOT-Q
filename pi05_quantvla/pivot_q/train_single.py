@@ -8,6 +8,7 @@ import random
 import shutil
 import sys
 import time
+from tqdm.auto import tqdm
 from collections import deque
 from pathlib import Path
 from types import SimpleNamespace
@@ -41,7 +42,7 @@ def main():
     run(json.loads(args.runtime_config.read_text()))
 
 
-def run(values):
+def run(values, *, bundle_loader=None, rollout_fn=None):
     import numpy as np
     import torch
     from pi05_quantvla.pivot_q.train import EnvClient, HORIZONS, run_rollout, state_loss, write_status
@@ -56,6 +57,10 @@ def run(values):
         from pi05_omegavla.backend import load_bundle
     else:
         from pi05_quantvla.pivot_q.train import load_bundle
+    if bundle_loader is not None:
+        load_bundle = bundle_loader
+    if rollout_fn is not None:
+        run_rollout = rollout_fn
     out = Path(cfg.output_dir)
     checkpoints = out / "checkpoints"
     signature = protocol_signature(values)
@@ -145,13 +150,17 @@ def run(values):
             lane["cuda"] = torch.cuda.get_rng_state()
             lane["numpy"] = np.random.get_state()
 
-        for round_index in range(start, end):
+        progress = tqdm(range(start, end), initial=start, total=total,
+                        desc="Training rounds", unit="round", dynamic_ncols=True)
+        for round_index in progress:
             started, batches, records = time.time(), [], []
             for lane_index, lane in enumerate(streams):
                 activate(lane)
                 suite_index, local_round = divmod(round_index, cfg.episodes_per_suite // 4)
                 suite, offset = cfg.suite_order[suite_index], 4 * local_round + lane_index
                 cfg.suite = suite
+                progress.set_postfix(suite=suite, rollouts=f"{round_index * 4 + lane_index}/{total * 4}",
+                                     step=f"{step}/{total * cfg.updates_per_episode}")
                 task = orders[suite][offset]
                 states, success = run_rollout(cfg, teacher, student, env, task_id=task,
                     initial_state_id=lane["rng"].choice(cfg.initial_state_ids),
@@ -179,8 +188,9 @@ def run(values):
                                 "states": len(states), "selected": len(chosen.indices)})
                 write_status(out / "status.json", {"status": "collecting", "round": round_index + 1,
                     "streams_collected": lane_index + 1, "optimizer_step": step, "updated_at": time.time()})
-                print(f"Round {round_index + 1}: stream {lane_index + 1}/4 collected {len(states)} states", flush=True)
-            for _ in range(cfg.updates_per_episode):
+                tqdm.write(f"Round {round_index + 1}: stream {lane_index + 1}/4 collected {len(states)} states")
+            for _ in tqdm(range(cfg.updates_per_episode), desc="Optimizer updates", unit="update",
+                          leave=False, dynamic_ncols=True):
                 optimizer.zero_grad(set_to_none=True)
                 for lane, (states, weights) in zip(streams, batches, strict=True):
                     activate(lane)
@@ -197,11 +207,13 @@ def run(values):
                     raise FloatingPointError("Non-finite accumulated gradient")
                 optimizer.step()
                 step += 1
+                progress.set_postfix(suite=suite, rollouts=f"{(round_index + 1) * 4}/{total * 4}",
+                                     step=f"{step}/{total * cfg.updates_per_episode}")
             record = {"round": round_index + 1, "optimizer_step": step, "rollouts_complete": (round_index + 1) * 4,
                       "gradient_norm": float(norm), "duration_seconds": time.time() - started, "streams": records}
             with metrics.open("a") as handle:
                 handle.write(json.dumps(record) + "\n")
-            print(json.dumps(record), flush=True)
+            tqdm.write(json.dumps(record))
             if step % cfg.save_every_steps == 0 or round_index + 1 == end:
                 checkpoints.mkdir(exist_ok=True)
                 final = checkpoints / f"step-{step:06d}"
@@ -231,6 +243,8 @@ def run(values):
                 link.unlink()
             link.symlink_to(Path("checkpoints") / f"step-{step:06d}" / "adapter")
     finally:
+        if "progress" in locals():
+            progress.close()
         env.close()
         if clean:
             clean.close()

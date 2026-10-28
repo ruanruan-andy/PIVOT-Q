@@ -1,5 +1,5 @@
-assets: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q/third_party/LIBERO-plus/libero/libero/assets
-bddl_files: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q/third_party/LIBERO-plus/libero/libero/bddl_files
-benchmark_root: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q/third_party/LIBERO-plus/libero/libero
-datasets: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q/third_party/LIBERO-plus/datasets
-init_states: /lumos-vePFS/suzhou/Users/ruan/PIVOT-Q/third_party/LIBERO-plus/libero/libero/init_files
+assets: /home/ps/data/nguyen/PIVOT-Q/third_party/LIBERO-plus/libero/libero/assets
+bddl_files: /home/ps/data/nguyen/PIVOT-Q/third_party/LIBERO-plus/libero/libero/bddl_files
+benchmark_root: /home/ps/data/nguyen/PIVOT-Q/third_party/LIBERO-plus/libero/libero
+datasets: /home/ps/data/nguyen/PIVOT-Q/third_party/LIBERO-plus/datasets
+init_states: /home/ps/data/nguyen/PIVOT-Q/third_party/LIBERO-plus/libero/libero/init_files
