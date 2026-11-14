@@ -1,0 +1,152 @@
+output_root: /home/ps/data/nguyen/PIVOT-Q-4090/outputs
+benchmark:
+  task_file: /home/ps/data/nguyen/PIVOT-Q-4090/data/libero_plus_first20.json
+  suites:
+  - libero_object
+  - libero_spatial
+  - libero_goal
+  - libero_10
+paths:
+  omega: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/Omega-QVLA
+  quantvla: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/QuantVLA
+  libero: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/LIBERO
+  libero_plus: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/LIBERO-plus
+  plus_config: /home/ps/data/nguyen/PIVOT-Q-4090/configs/libero_plus
+  clean_config: /home/ps/data/nguyen/PIVOT-Q-4090/configs/libero
+  simulator_python: /home/ps/miniconda3/envs/libero_test/bin/python
+  evaluation_python: /home/ps/miniconda3/envs/lerobot_pi05/bin/python
+  qvla: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/QVLA
+model:
+  checkpoint: /home/ps/data/nguyen/PIVOT-Q-4090/models/original/openvla_oft
+  quant_pack: /home/ps/data/nguyen/PIVOT-Q-4090/models/quantized/openvla_oft_qvla
+oft_model:
+  device: cuda:0
+  teacher_device: cuda:0
+  dtype: bfloat16
+  attention: eager
+  num_images: 2
+  use_proprio: true
+  center_crop: true
+  unnorm_key: libero_spatial
+train:
+  estimate_flops: false
+  episodes_per_suite: 140
+  rollouts_per_round: 1
+  batch_size: 16
+  learning_rate: 5.0e-05
+  weight_decay: 0.01
+  gradient_clip: 1.0
+  rank: 16
+  alpha: 32
+  dropout: 0.05
+  loss_actions: first
+  anchor_lambda: 0.1
+  anchor_capacity: 256
+  anchor_batch_size: 4
+  anchor_horizon: 4
+  clean_task_ids:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  clean_initial_state_ids:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 26
+  - 27
+  - 28
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34
+  - 35
+  - 36
+  - 37
+  - 38
+  - 39
+  save_every_rounds: 10
+  keep_last_checkpoints: 2
+  seed: 0
+selection:
+  future_horizon: 4
+  discount: 0.9
+  alpha_q: 0.5
+  beta_r: 0.5
+  phase_bins: 4
+  top_per_phase: 4
+  percent: 20
+  min_gap: 4
+  weight_min: 0.5
+  weight_max: 2.0
+full_distill: {}
+evaluation:
+  estimate_flops: false
+  seed: 2026
+  action_steps: 1
+  settle_steps: 10
+  control_mode: relative
+  hard_reset: true
+  max_steps:
+    libero_object: 280
+    libero_spatial: 220
+    libero_goal: 300
+    libero_10: 520
+  libero:
+    task_ids: null
+    episodes_per_task: 50
+    initial_state_start: 0
+  libero_plus:
+    initial_state_id: 0
+environment:
+  host: 127.0.0.1
+  timeout_ms: 120000
+  num_steps_wait: 10
+# Default quantization settings.
+quantization:
+  bits:
+  - 0
+  - 2
+  - 4
+  - 8
+  - 16
+  min_bit: 4
+  max_zero_fraction: 0.0
+  target_avg_bits: 4.0
+  max_samples: 128
+  percdamp: 0.01
+  resume_proxy: true
+diagnostics:
+  save_eval_states: false
+  save_train_states: false

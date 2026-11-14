@@ -1,0 +1,72 @@
+output_root: /home/ps/data/nguyen/PIVOT-Q-4090/outputs
+benchmark:
+  task_file: /home/ps/data/nguyen/PIVOT-Q-4090/data/libero_plus_first20.json
+  suites:
+  - libero_object
+  - libero_spatial
+  - libero_goal
+  - libero_10
+paths:
+  omega: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/Omega-QVLA
+  quantvla: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/QuantVLA
+  libero: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/LIBERO
+  libero_plus: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/LIBERO-plus
+  plus_config: /home/ps/data/nguyen/PIVOT-Q-4090/configs/libero_plus
+  clean_config: /home/ps/data/nguyen/PIVOT-Q-4090/configs/libero
+  simulator_python: /home/ps/miniconda3/envs/libero_test/bin/python
+  evaluation_python: /home/ps/miniconda3/envs/lerobot_pi05/bin/python
+model:
+  checkpoint: /home/ps/data/nguyen/PIVOT-Q-4090/models/original/gr00t_n1_5
+  quant_pack: /home/ps/data/nguyen/PIVOT-Q-4090/models/quantized/groot_holoq
+  num_inference_steps: 4
+train:
+  estimate_flops: false
+  seed: 0
+  episodes_per_suite: 140
+  rollouts_per_round: 1
+  batch_size: 32
+  learning_rate: 5.0e-05
+  weight_decay: 0.01
+  gradient_clip_norm: 1.0
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  save_every_rounds: 10
+  checkpoint_denoising: true
+  keep_last_checkpoints: 2
+selection:
+  temporal_horizon: 4
+  temporal_discount: 0.9
+  alpha_q: 0.5
+  beta_r: 0.5
+  phase_bins: 4
+  priority_per_phase: 4
+  percent: 20
+  random_per_phase: 0
+  min_temporal_gap: 4
+  selection_method: pivot_q
+  selection_weighting: vulnerability
+  lambda_anchor: 0.1
+  anchor_replay_size: 256
+  anchor_batch_size: 4
+full_distill: {}
+evaluation:
+  estimate_flops: false
+  seed: 2026
+  action_steps: 1
+  settle_steps: 10
+  control_mode: relative
+  hard_reset: true
+  max_steps:
+    libero_object: 280
+    libero_spatial: 220
+    libero_goal: 300
+    libero_10: 520
+  libero:
+    task_ids: null
+    episodes_per_task: 50
+    initial_state_start: 0
+  libero_plus:
+    initial_state_id: 0
+calibration:
+  num_samples: 128

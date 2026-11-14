@@ -1,0 +1,19 @@
+# Direct dependencies observed on PS. Install PyTorch and upstream source packages as described in docs/setup.md.
+accelerate==0.30.1
+diffusers==0.30.3
+draccus==0.8.0
+einops==0.8.2
+h5py==3.16.0
+huggingface-hub==0.25.2
+imageio==2.38.0
+json-numpy==2.1.1
+numpy==1.26.4
+peft==0.11.1
+PyYAML==6.0.3
+pyzmq==27.2.0
+sentencepiece==0.1.99
+tensorflow==2.15.0
+tensorflow-datasets==4.9.3
+timm==0.9.10
+tqdm==4.70.1
+wandb==0.16.6

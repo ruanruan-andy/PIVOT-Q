@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+/models/
+/outputs/
+/motivation/*
+!/motivation/README.md
+!/motivation/action_intervention.py
+/data/calibration/lerobot_libero/
+/figure/

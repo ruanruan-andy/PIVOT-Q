@@ -1,0 +1,97 @@
+output_root: /home/ps/data/nguyen/PIVOT-Q-4090/outputs
+benchmark:
+  task_file: /home/ps/data/nguyen/PIVOT-Q-4090/data/libero_plus_first20.json
+  suites:
+  - libero_object
+  - libero_spatial
+  - libero_goal
+  - libero_10
+paths:
+  omega: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/Omega-QVLA
+  quantvla: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/QuantVLA
+  libero: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/LIBERO
+  libero_plus: /home/ps/data/nguyen/PIVOT-Q-4090/third_party/LIBERO-plus
+  plus_config: /home/ps/data/nguyen/PIVOT-Q-4090/configs/libero_plus
+  clean_config: /home/ps/data/nguyen/PIVOT-Q-4090/configs/libero
+  simulator_python: /home/ps/miniconda3/envs/libero_test/bin/python
+  evaluation_python: /home/ps/miniconda3/envs/lerobot_pi05/bin/python
+model:
+  checkpoint: /home/ps/data/nguyen/PIVOT-Q-4090/models/original/pi05_libero
+  quant_pack: /home/ps/data/nguyen/PIVOT-Q-4090/models/quantized/pi05_quantvla
+  num_inference_steps: 10
+# Default quantization settings.
+quantization:
+  weight_bits: 4
+  activation_bits: 8
+  block_size: 16
+  lambda_smooth: 0.15
+  activation_percentile: 99.9
+  calibration_batches: 128
+  enable_permutation: true
+  row_rotation: restore
+  atm_enabled: true
+  ohb_enabled: true
+  log_scale_clip: 0.4
+  neutrality_band: 0.03
+train:
+  seed: 0
+  episodes_per_suite: 140
+  rollouts_per_round: 1
+  batch_size: 16
+  estimate_flops: false
+  action_steps: 1
+  learning_rate: 5.0e-05
+  weight_decay: 0.01
+  gradient_clip_norm: 1.0
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  save_every_rounds: 10
+  keep_last_checkpoints: 2
+  initial_state_ids:
+  - 0
+methods:
+  pivot_q:
+    temporal_horizon: 4
+    temporal_discount: 0.9
+    alpha_q: 0.5
+    beta_r: 0.5
+    phase_bins: 4
+    top_per_phase: 4
+    percent: 20
+    min_temporal_gap: 4
+    weight_min: 0.5
+    weight_max: 2.0
+    anchor_lambda: 0.1
+    anchor_replay_size: 256
+    anchor_batch_size: 4
+    clean_anchor_horizon: 4
+  full_distill:
+    anchor_lambda: 0.0
+calibration:
+  dataset: lerobot/libero
+  dataset_root: /home/ps/data/nguyen/PIVOT-Q-4090/data/calibration/lerobot_libero
+  task_map: /home/ps/data/nguyen/PIVOT-Q-4090/data/calibration/clean_task_suites.json
+  buffer: /home/ps/data/nguyen/PIVOT-Q-4090/outputs/calibration/pi05/seed/0/observations.pt
+  seed: 0
+  num_samples: 128
+  token_cap: 128
+  layers_per_pass: 8
+evaluation:
+  estimate_flops: false
+  seed: 2026
+  action_steps: 10
+  settle_steps: 10
+  control_mode: relative
+  hard_reset: true
+  max_steps:
+    libero_object: 280
+    libero_spatial: 220
+    libero_goal: 300
+    libero_10: 520
+  libero:
+    task_ids: null
+    episodes_per_task: 50
+    initial_state_start: 0
+  libero_plus:
+    initial_state_id: 0
